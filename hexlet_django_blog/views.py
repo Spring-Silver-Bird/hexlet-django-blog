@@ -39,3 +39,12 @@ class AboutView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["tags"] = tags
         return context
+
+
+'''class ArticleCommentsView(View):
+    def get(self, request, *args, **kwargs):
+        comment = get_object_or_404(
+            Comment, id=kwargs["id"], article__id=kwargs["article_id"]
+        )
+
+        return render(...)'''

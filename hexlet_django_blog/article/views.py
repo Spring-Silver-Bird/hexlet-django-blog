@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from hexlet_django_blog.article.models import Article
-from django.http import HttpResponse
+
 from hexlet_django_blog.views import IndexView
 
 # Create your views here.
@@ -41,12 +41,16 @@ class ArticleListView(IndexView):
         context['articles'] = ARTICLES
         return context
 
-'''class ArticleDetailView(IndexView):
-    template_name = "articles/article_detail.html"
-
-    def get_context_data(self, tags, articles_id, **kwargs):
-        context['article'] = [{'articles_id': articles_id, "tags": tags}]
-        return context'''
+class ArticleDetailView(IndexView):
+    def get(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, id=kwargs["id"])
+        return render(
+            request,
+            "articles/show.html",
+            context={
+                "article": article,
+            },
+        )
 
 
 class IndexView(View):
@@ -59,6 +63,19 @@ class IndexView(View):
                 "articles": articles,
             },
         )
+
+
+class ArticleView(View):
+    def get(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, id=kwargs["id"])
+        return render(
+            request,
+            "articles/show.html",
+            context={
+                "article": article,
+            },
+        )
+
 
 
 def index(request, tags=None, article_id=None):
