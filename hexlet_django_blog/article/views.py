@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from hexlet_django_blog.article.models import Article
-
+from .forms import ArticleForm
+from django.contrib import messages
+from .models import ArticleComment
 from hexlet_django_blog.views import IndexView
 
 # Create your views here.
@@ -75,6 +77,33 @@ class ArticleView(View):
                 "article": article,
             },
         )
+
+
+'''class ArticleCommentFormView(View):
+    def post(self, request, *args, **kwargs):
+        form = ArticleCommentForm(request.POST)  # Получаем данные формы из запроса
+        if form.is_valid():  # Проверяем данные формы на корректность
+            comment = form.save(commit=False)  # Получаем заполненную модель
+            # Дополнительно обрабатываем модель
+            comment.content = check_for_spam(form.data["content"])
+            comment.save()'''
+
+
+class ArticleFormCreateView(View):
+    def get(self, request, *args, **kwargs):
+        form = ArticleForm()
+        return render(request, "articles/create.html", {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = ArticleForm(request.POST)
+        if form.is_valid():  # Если данные корректные, то сохраняем данные формы
+            form.save()
+            messages.success(request, 'The article has been created successfully.')
+            return redirect('article_list')  # Редирект на указанный маршрут
+        # Если данные некорректные, то возвращаем человека обратно на страницу с заполненной формой
+        else:
+            messages.error(request, 'Please correct the following errors:')
+            return render(request, 'articles/create.html', {'form': form})
 
 
 

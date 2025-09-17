@@ -1,0 +1,26 @@
+{% block sidebar %}
+    <ul>
+        <li><a href="/">Главная</a></li>
+        <li><a href="/articles/">Статьи</a></li>
+        <li><a href="/articles/create/">Новая статья</a></li>
+        <li><a href="/about/">О блоге</a></li>
+    </ul>
+{% endblock %}
+
+{% if form.errors %}
+<div>
+    <ul>
+    {% for error in form.errors %}
+        <li><strong>{{ error|escape }}</strong></li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<form action="{% url 'articles_create' %}" method="post">
+    {% csrf_token %}
+    <table border="1">
+    {{ form }}
+    </table>
+    <input type="submit" value="Создать">
+</form>

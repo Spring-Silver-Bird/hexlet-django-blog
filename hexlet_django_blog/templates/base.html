@@ -4,16 +4,27 @@
     <title>{% block title %}Django на Хекслете{% endblock %}</title>
 </head>
 <body>
-<div id="sidebar">
-    {% block sidebar %}
-        <ul>
-            <li><a href="/">Главная</a></li>
-            <li><a href="/articles/">Статьи</a></li>
-        </ul>
-    {% endblock %}
-</div>
-<div id="content">
-    {% block content %}{% endblock %}
-</div>
+    {% if messages %}
+        <div class="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
+                {{ message }}
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    <div id="sidebar">
+        {% block sidebar %}
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/articles/">Статьи</a></li>
+                <li><a href="/articles/create/">Новая статья</a></li>
+            </ul>
+        {% endblock %}
+    </div>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>
