@@ -121,11 +121,13 @@ class ArticleFormEditView(View):
         form = ArticleForm(request.POST, instance=article)
         if form.is_valid():
             form.save()
+            messages.success(request, 'The article has been updated successfully.')
             return redirect("article_list")
-
-        return render(
-            request, "articles/update.html", {"form": form, "article_id": article_id}
-        )
+        else:
+            messages.error(request, 'Please correct the following errors:')
+            return render(
+                request, "articles/update.html", {"form": form, "article_id": article_id}
+            )
 
 def index(request, tags=None, article_id=None):
     article_id = 42
